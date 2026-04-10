@@ -37,7 +37,7 @@ async function getActiveProblems(additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: 'extend',
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -69,7 +69,7 @@ async function getProblemsByHost(hostId, additionalOptions = {}) {
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: ['tag', 'value'],
             selectAcknowledges: ['acknowledgeid', 'userid', 'clock', 'message'],
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -100,7 +100,7 @@ async function getProblemsByHosts(hostIds, additionalOptions = {}) {
             hostids: hostIds,
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: 'extend',
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -131,7 +131,7 @@ async function getProblemsBySeverity(severities, additionalOptions = {}) {
             severities: severities,
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: 'extend',
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -156,7 +156,7 @@ async function getUnacknowledgedProblems(additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock'],
             acknowledged: 0, // integer flag: 0=unacknowledged, 1=acknowledged
             selectHosts: ['hostid', 'host', 'name'],
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -188,7 +188,7 @@ async function getRecentProblems(timeFrom, timeTill = null, additionalOptions = 
             time_from: timeFrom,
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: 'extend',
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -270,7 +270,7 @@ async function getProblemsWithTags(tags, additionalOptions = {}) {
             tags: tags,
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: ['tag', 'value'],
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -323,7 +323,7 @@ async function getProblemsByTriggers(triggerIds, additionalOptions = {}) {
             objectids: triggerIds,
             selectHosts: ['hostid', 'host', 'name'],
             selectTags: 'extend',
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: 'DESC',
             ...additionalOptions
         };

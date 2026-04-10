@@ -29,7 +29,7 @@ async function getInfrastructureHealth(options = {}) {
             request('problem.get', { 
                 output: ['problemid', 'name', 'severity', 'clock'],
                 selectHosts: ['name'],
-                sortfield: ['clock'],
+                sortfield: ['eventid'],
                 sortorder: ['DESC']
             }),
             request('trigger.get', {
@@ -128,7 +128,7 @@ async function getCriticalIssues(options = {}) {
             selectHosts: ['name', 'hostid'],
             selectTags: 'extend',
             severities: [4, 5], // Only high and critical (top-level param, not filter)
-            sortfield: ['clock'],
+            sortfield: ['eventid'],
             sortorder: ['DESC'],
             limit: options.limit || 20
         });
@@ -247,7 +247,7 @@ async function getLast24HoursSummary(options = {}) {
             output: ['problemid', 'name', 'severity', 'clock'],
             time_from: timeFrom,
             selectHosts: ['name'],
-            sortfield: 'clock',
+            sortfield: 'eventid',
             sortorder: 'DESC',
             limit: 50
         });
@@ -287,7 +287,7 @@ async function getActionableItems(options = {}) {
                 selectHosts: ['name'],
                 acknowledged: 0,     // top-level param, not inside filter
                 severities: [3, 4, 5], // top-level param, not inside filter
-                sortfield: ['clock'],
+                sortfield: ['eventid'],
                 sortorder: ['DESC'],
                 limit: 10
             }),
