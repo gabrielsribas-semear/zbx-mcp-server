@@ -42,7 +42,8 @@ class ZabbixClient {
 
             if (config.api.authMethod === 'token') {
                 // API Token authentication (Zabbix 5.4+)
-                clientConfig.token = config.api.apiToken;
+                // NOTE: AsyncZabbixAPI constructor does NOT accept a 'token' option.
+                // The token must be passed to login() as the first argument.
                 logger.info(`${config.logging.prefix} Using API token authentication`);
             } else if (config.api.authMethod === 'password') {
                 // Username/Password authentication (traditional)
@@ -58,8 +59,11 @@ class ZabbixClient {
 
             this.api = new AsyncZabbixAPI(clientConfig);
 
-            // For username/password auth, login is required
-            if (config.api.authMethod === 'password') {
+            // login() must always be called — for both token and password auth.
+            // Signature: login(token, user, password)
+            if (config.api.authMethod === 'token') {
+                await this.api.login(config.api.apiToken);
+            } else {
                 await this.api.login(null, config.api.username, config.api.password);
             }
             
