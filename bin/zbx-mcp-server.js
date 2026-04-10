@@ -45,6 +45,7 @@ OPTIONS
   --http            Use HTTP/Streamable transport instead of stdio
   --port <port>     HTTP port                 (env: MCP_HTTP_PORT, default: 3000)
   --host <host>     HTTP bind host            (env: MCP_HTTP_HOST, default: localhost)
+  --insecure        Disable TLS certificate validation (expired/self-signed certs)
   --help            Show this message and exit
   --version         Show package version and exit
 
@@ -127,6 +128,10 @@ for (let i = 0; i < args.length; i++) {
 
     case '--http':
       process.env.MCP_TRANSPORT_MODE = 'http';
+      break;
+
+    case '--insecure':
+      process.env.ZABBIX_IGNORE_SELFSIGNED_CERT = 'true';
       break;
 
     case '--port':

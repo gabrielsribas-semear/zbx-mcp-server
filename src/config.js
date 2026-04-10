@@ -84,6 +84,13 @@ const config = {
     environment: process.env.NODE_ENV || 'development'
 };
 
+// Apply TLS bypass at the Node.js process level so all HTTP clients
+// (axios, zabbix-utils, etc.) respect the setting — including expired certs.
+if (config.api.ignoreSelfSignedCert) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    logger.warn('TLS certificate validation is DISABLED (ZABBIX_IGNORE_SELFSIGNED_CERT=true). Do not use in production with sensitive data.');
+}
+
 // Validate authentication configuration
 if (config.api.authMethod === 'none') {
     const warningMsg = 'CRITICAL: No authentication credentials provided. Set either ZABBIX_API_TOKEN or ZABBIX_PASSWORD environment variable.';
