@@ -1,6 +1,6 @@
 {
   "name": "zbx-mcp-server",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Production-grade MCP server for Zabbix — 90+ tools across 19 categories. Run instantly with npx zbx-mcp-server.",
   "license": "MIT",
   "author": "Han Yong Lim <hanyong.lim@gmail.com>",
