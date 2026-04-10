@@ -30,8 +30,8 @@ async function getInfrastructureHealth(options = {}) {
                 output: ['problemid', 'name', 'severity', 'clock'],
                 selectHosts: ['name'],
                 recent: true,
-                sortfield: ['severity', 'clock'],
-                sortorder: ['DESC', 'DESC']
+                sortfield: ['clock'],
+                sortorder: ['DESC']
             }),
             request('trigger.get', {
                 output: ['triggerid', 'description', 'priority', 'value'],
@@ -131,8 +131,8 @@ async function getCriticalIssues(options = {}) {
             filter: { 
                 severity: [4, 5] // Only high and critical
             },
-            sortfield: ['severity', 'clock'],
-            sortorder: ['DESC', 'DESC'],
+            sortfield: ['clock'],
+            sortorder: ['DESC'],
             limit: options.limit || 20
         });
 
@@ -292,8 +292,8 @@ async function getActionableItems(options = {}) {
                     acknowledged: 0,
                     severity: [3, 4, 5]
                 },
-                sortfield: ['severity', 'clock'],
-                sortorder: ['DESC', 'DESC'],
+                sortfield: ['clock'],
+                sortorder: ['DESC'],
                 limit: 10
             }),
             request('host.get', {
@@ -386,7 +386,7 @@ async function getPerformanceAlerts(options = {}) {
             },
             search: { description: searchTerms },
             sortfield: ['priority', 'lastchange'],
-            sortorder: ['DESC', 'DESC'],
+            sortorder: ['DESC'],
             limit: 15
         });
 

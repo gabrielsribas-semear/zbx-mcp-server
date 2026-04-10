@@ -38,7 +38,7 @@ async function getActiveProblems(additionalOptions = {}) {
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
             recent: false, // Only unresolved problems
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -71,7 +71,7 @@ async function getProblemsByHost(hostId, additionalOptions = {}) {
             selectTriggers: ['triggerid', 'description', 'priority'],
             selectTags: ['tag', 'value'],
             selectAcknowledges: ['acknowledgeid', 'userid', 'clock', 'message'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -102,7 +102,7 @@ async function getProblemsByHosts(hostIds, additionalOptions = {}) {
             hostids: hostIds,
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -133,7 +133,7 @@ async function getProblemsBySeverity(severities, additionalOptions = {}) {
             severities: severities,
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -159,7 +159,7 @@ async function getUnacknowledgedProblems(additionalOptions = {}) {
             acknowledged: false,
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -275,7 +275,7 @@ async function getProblemsWithTags(tags, additionalOptions = {}) {
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
             selectTags: ['tag', 'value'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
@@ -328,7 +328,7 @@ async function getProblemsByTriggers(triggerIds, additionalOptions = {}) {
             objectids: triggerIds,
             selectHosts: ['hostid', 'host', 'name'],
             selectTriggers: ['triggerid', 'description', 'priority'],
-            sortfield: ['severity', 'clock'],
+            sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
         };
