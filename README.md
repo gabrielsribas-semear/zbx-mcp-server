@@ -101,18 +101,20 @@ ZABBIX_PASSWORD=your_password
 
 ### Installation
 
-#### **Option A: npx — no installation required (recommended)**
+#### **Option A: npx via GitHub — no installation required (recommended)**
 
 ```bash
-npx zbx-mcp-server --help
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42 --help
 ```
 
 The server runs directly without cloning the repository or installing globally.
 
-#### **Option B: Global install**
+> Once published to npm, this will simplify to `npx zbx-mcp-server`.
+
+#### **Option B: Global install via GitHub**
 
 ```bash
-npm install -g zbx-mcp-server
+npm install -g github:gabrielsribas-semear/zbx-mcp-server#v0.1.42
 zbx-mcp-server --help
 ```
 
@@ -136,16 +138,16 @@ node src/index.js
 # via env var (preferred for MCP clients)
 ZABBIX_API_URL=https://your-zabbix-server/api_jsonrpc.php \
 ZABBIX_API_TOKEN=your_api_token_here \
-npx zbx-mcp-server
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42
 
 # via CLI flags
-npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token your_api_token_here
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42 --url https://your-zabbix-server/api_jsonrpc.php --token your_api_token_here
 ```
 
 #### **Option 2: Username/Password Authentication**
 
 ```bash
-npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --user Admin --pass your_password
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42 --url https://your-zabbix-server/api_jsonrpc.php --user Admin --pass your_password
 ```
 
 Or using a `.env` file (when running from source):
@@ -160,10 +162,10 @@ ZABBIX_PASSWORD=your_password
 
 ```bash
 # stdio mode (default) — used by MCP clients
-npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token mytoken
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42 --url https://your-zabbix-server/api_jsonrpc.php --token mytoken
 
 # HTTP mode — useful for development / debugging
-npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token mytoken --http --port 3000
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42 --url https://your-zabbix-server/api_jsonrpc.php --token mytoken --http --port 3000
 ```
 
 **Log output (on stderr):**
@@ -184,13 +186,13 @@ Add the following to your `claude_desktop_config.json`:
 - **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-#### **npx — no install needed (recommended)**
+#### **npx via GitHub — no install needed (recommended)**
 ```json
 {
   "mcpServers": {
     "zabbix": {
       "command": "npx",
-      "args": ["-y", "zbx-mcp-server"],
+      "args": ["-y", "github:gabrielsribas-semear/zbx-mcp-server#v0.1.42"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_API_TOKEN": "your_api_token_here"
@@ -206,7 +208,7 @@ Add the following to your `claude_desktop_config.json`:
   "mcpServers": {
     "zabbix": {
       "command": "npx",
-      "args": ["-y", "zbx-mcp-server"],
+      "args": ["-y", "github:gabrielsribas-semear/zbx-mcp-server#v0.1.42"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_USERNAME": "Admin",
@@ -225,13 +227,13 @@ Add the following to your `mcp.json` in your Cursor settings directory:
 - **Mac**: `~/Library/Application Support/Cursor/User/mcp.json`
 - **Linux**: `~/.config/Cursor/User/mcp.json`
 
-#### **npx — no install needed (recommended)**
+#### **npx via GitHub — no install needed (recommended)**
 ```json
 {
   "mcpServers": {
     "zabbix": {
       "command": "npx",
-      "args": ["-y", "zbx-mcp-server"],
+      "args": ["-y", "github:gabrielsribas-semear/zbx-mcp-server#v0.1.42"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_API_TOKEN": "your_api_token_here"
@@ -244,6 +246,7 @@ Add the following to your `mcp.json` in your Cursor settings directory:
 ### Configuration Notes
 
 - **npx caches** the package after first run — subsequent starts are near-instant.
+- When the package is published to npm, replace `github:gabrielsribas-semear/zbx-mcp-server#v0.1.42` with `zbx-mcp-server`.
 - Replace `ZABBIX_API_URL` and credentials with your actual Zabbix server values.
 - Use `ZABBIX_API_TOKEN` for Zabbix 5.4+ (preferred). Older versions use `ZABBIX_USERNAME` + `ZABBIX_PASSWORD`.
 - **Server name**: You can change `zabbix-mcp` to any name you prefer

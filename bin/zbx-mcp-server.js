@@ -64,7 +64,7 @@ MCP CLIENT CONFIG (Claude Desktop / Cursor / etc.)
     "mcpServers": {
       "zabbix": {
         "command": "npx",
-        "args": ["-y", "zbx-mcp-server"],
+        "args": ["-y", "github:gabrielsribas-semear/zbx-mcp-server#v0.1.42"],
         "env": {
           "ZABBIX_API_URL": "https://zabbix.example.com/api_jsonrpc.php",
           "ZABBIX_API_TOKEN": "your_token_here"

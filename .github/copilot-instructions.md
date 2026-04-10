@@ -6,7 +6,7 @@
 **Purpose:** A production-grade [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that exposes the complete Zabbix API surface (90+ tools across 19 categories) as MCP tools, prompts, and resources — enabling AI assistants to fully manage Zabbix monitoring infrastructure.  
 **Runtime:** Node.js 18+ (CommonJS, `"type": "commonjs"`)  
 **Transport:** stdio (primary, for MCP clients) and HTTP/Streamable (secondary, for development/integration)  
-**Distribution:** npm package (`zbx-mcp-server`) — runnable via `npx zbx-mcp-server` without prior installation.
+**Distribution:** GitHub-hosted package — runnable via `npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42` without prior installation. Not yet published to npm.
 
 ---
 
@@ -111,10 +111,10 @@ logger.error('message');  // writes to stderr
 
 ## npx Distribution
 
-The package is distributed on npm as `zbx-mcp-server`. Users can run it without installation:
+The package is distributed via GitHub. Users can run it without cloning:
 
 ```bash
-npx zbx-mcp-server
+npx github:gabrielsribas-semear/zbx-mcp-server#v0.1.42
 ```
 
 Or configure it in MCP client configs:
@@ -124,7 +124,7 @@ Or configure it in MCP client configs:
   "mcpServers": {
     "zabbix": {
       "command": "npx",
-      "args": ["-y", "zbx-mcp-server"],
+      "args": ["-y", "github:gabrielsribas-semear/zbx-mcp-server#v0.1.42"],
       "env": {
         "ZABBIX_API_URL": "https://zabbix.example.com/api_jsonrpc.php",
         "ZABBIX_API_TOKEN": "your_token"
