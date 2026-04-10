@@ -7,7 +7,7 @@
  */
 
 const { request } = require('./zabbix-client');
-const { logger, config } = require('../utils/logger');
+const { logger } = require('../utils/logger');
 
 /**
  * Get overall infrastructure health summary
@@ -17,7 +17,7 @@ const { logger, config } = require('../utils/logger');
  */
 async function getInfrastructureHealth(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting infrastructure health summary`);
+        logger.debug('Getting infrastructure health summary');
         
         // Get hosts, problems, and basic metrics in parallel
         const [hosts, problems, triggers] = await Promise.all([
@@ -109,7 +109,7 @@ async function getInfrastructureHealth(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get infrastructure health:`, error.message);
+        logger.error('Failed to get infrastructure health:', error.message);
         throw new Error(`Failed to retrieve infrastructure health: ${error.message}`);
     }
 }
@@ -122,7 +122,7 @@ async function getInfrastructureHealth(options = {}) {
  */
 async function getCriticalIssues(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting critical issues`);
+        logger.debug('Getting critical issues');
         
         const problems = await request('problem.get', {
             output: ['problemid', 'name', 'severity', 'clock', 'acknowledged'],
@@ -166,7 +166,7 @@ async function getCriticalIssues(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get critical issues:`, error.message);
+        logger.error('Failed to get critical issues:', error.message);
         throw new Error(`Failed to retrieve critical issues: ${error.message}`);
     }
 }
@@ -179,7 +179,7 @@ async function getCriticalIssues(options = {}) {
  */
 async function getSystemOverview(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting system overview`);
+        logger.debug('Getting system overview');
         
         const [problems, maintenance, hosts, triggers] = await Promise.all([
             request('problem.get', { 
@@ -231,7 +231,7 @@ async function getSystemOverview(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get system overview:`, error.message);
+        logger.error('Failed to get system overview:', error.message);
         throw new Error(`Failed to retrieve system overview: ${error.message}`);
     }
 }
@@ -243,7 +243,7 @@ async function getSystemOverview(options = {}) {
  */
 async function getLast24HoursSummary(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting 24h summary`);
+        logger.debug('Getting 24h summary');
         
         const timeFrom = Math.floor(Date.now() / 1000) - (24 * 60 * 60);
         const recentProblems = await request('problem.get', {
@@ -270,7 +270,7 @@ async function getLast24HoursSummary(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get 24h summary:`, error.message);
+        logger.error('Failed to get 24h summary:', error.message);
         throw new Error(`Failed to retrieve 24-hour summary: ${error.message}`);
     }
 }
@@ -282,7 +282,7 @@ async function getLast24HoursSummary(options = {}) {
  */
 async function getActionableItems(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting actionable items`);
+        logger.debug('Getting actionable items');
         
         const [unacknowledgedProblems, unavailableHosts] = await Promise.all([
             request('problem.get', {
@@ -349,7 +349,7 @@ async function getActionableItems(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get actionable items:`, error.message);
+        logger.error('Failed to get actionable items:', error.message);
         throw new Error(`Failed to retrieve actionable items: ${error.message}`);
     }
 }
@@ -361,7 +361,7 @@ async function getActionableItems(options = {}) {
  */
 async function getPerformanceAlerts(options = {}) {
     try {
-        logger.debug(`${config.logging.prefix} Getting performance alerts`);
+        logger.debug('Getting performance alerts');
         
         let searchTerms = ['CPU', 'Memory', 'Disk', 'Network', 'Load', 'Space', 'Usage', 'Performance'];
         
@@ -423,7 +423,7 @@ async function getPerformanceAlerts(options = {}) {
         };
 
     } catch (error) {
-        logger.error(`${config.logging.prefix} Failed to get performance alerts:`, error.message);
+        logger.error('Failed to get performance alerts:', error.message);
         throw new Error(`Failed to retrieve performance alerts: ${error.message}`);
     }
 }
