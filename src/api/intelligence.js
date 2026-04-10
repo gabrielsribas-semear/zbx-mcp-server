@@ -29,7 +29,6 @@ async function getInfrastructureHealth(options = {}) {
             request('problem.get', { 
                 output: ['problemid', 'name', 'severity', 'clock'],
                 selectHosts: ['name'],
-                recent: true,
                 sortfield: ['clock'],
                 sortorder: ['DESC']
             }),
@@ -128,9 +127,7 @@ async function getCriticalIssues(options = {}) {
             output: ['problemid', 'name', 'severity', 'clock', 'acknowledged'],
             selectHosts: ['name', 'hostid'],
             selectTags: 'extend',
-            filter: { 
-                severity: [4, 5] // Only high and critical
-            },
+            severities: [4, 5], // Only high and critical (top-level param, not filter)
             sortfield: ['clock'],
             sortorder: ['DESC'],
             limit: options.limit || 20
@@ -288,10 +285,8 @@ async function getActionableItems(options = {}) {
             request('problem.get', {
                 output: ['problemid', 'name', 'severity', 'clock'],
                 selectHosts: ['name'],
-                filter: { 
-                    acknowledged: 0,
-                    severity: [3, 4, 5]
-                },
+                acknowledged: 0,     // top-level param, not inside filter
+                severities: [3, 4, 5], // top-level param, not inside filter
                 sortfield: ['clock'],
                 sortorder: ['DESC'],
                 limit: 10
@@ -375,6 +370,10 @@ async function getPerformanceAlerts(options = {}) {
             searchTerms = typeMap[options.resourceType] || searchTerms;
         }
 
+        // Build priority filter: explicit array of values (filter does IN match, not range)
+        const minPriority = options.severityThreshold != null ? options.severityThreshold : 3;
+        const priorities = [0, 1, 2, 3, 4, 5].filter(p => p >= minPriority);
+
         const performanceTriggers = await request('trigger.get', {
             output: ['triggerid', 'description', 'priority', 'lastchange'],
             selectHosts: ['name'],
@@ -382,7 +381,7 @@ async function getPerformanceAlerts(options = {}) {
             filter: { 
                 value: 1,
                 status: 0,
-                priority: options.severityThreshold ? [options.severityThreshold, 5] : undefined
+                priority: priorities
             },
             search: { description: searchTerms },
             sortfield: ['priority', 'lastchange'],

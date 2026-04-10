@@ -36,8 +36,7 @@ async function getActiveProblems(additionalOptions = {}) {
         const options = {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
-            recent: false, // Only unresolved problems
+            selectTags: 'extend',
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
@@ -68,7 +67,6 @@ async function getProblemsByHost(hostId, additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged', 'r_eventid'],
             hostids: [hostId],
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
             selectTags: ['tag', 'value'],
             selectAcknowledges: ['acknowledgeid', 'userid', 'clock', 'message'],
             sortfield: ['clock'],
@@ -101,7 +99,7 @@ async function getProblemsByHosts(hostIds, additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             hostids: hostIds,
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
+            selectTags: 'extend',
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
@@ -132,7 +130,7 @@ async function getProblemsBySeverity(severities, additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             severities: severities,
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
+            selectTags: 'extend',
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
@@ -156,9 +154,8 @@ async function getUnacknowledgedProblems(additionalOptions = {}) {
         
         const options = {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock'],
-            acknowledged: false,
+            acknowledged: 0, // integer flag: 0=unacknowledged, 1=acknowledged
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
@@ -190,7 +187,7 @@ async function getRecentProblems(timeFrom, timeTill = null, additionalOptions = 
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             time_from: timeFrom,
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
+            selectTags: 'extend',
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
@@ -218,7 +215,6 @@ async function getProblemStatistics(additionalOptions = {}) {
         
         const problems = await request('problem.get', {
             output: ['eventid', 'severity', 'acknowledged'],
-            recent: false, // Only unresolved problems
             countOutput: false,
             ...additionalOptions
         });
@@ -273,7 +269,6 @@ async function getProblemsWithTags(tags, additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             tags: tags,
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
             selectTags: ['tag', 'value'],
             sortfield: ['clock'],
             sortorder: 'DESC',
@@ -327,7 +322,7 @@ async function getProblemsByTriggers(triggerIds, additionalOptions = {}) {
             output: ['eventid', 'objectid', 'name', 'severity', 'clock', 'acknowledged'],
             objectids: triggerIds,
             selectHosts: ['hostid', 'host', 'name'],
-            selectTriggers: ['triggerid', 'description', 'priority'],
+            selectTags: 'extend',
             sortfield: ['clock'],
             sortorder: 'DESC',
             ...additionalOptions
