@@ -96,16 +96,33 @@ ZABBIX_PASSWORD=your_password
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
 - Zabbix server with API access
 - Valid Zabbix credentials (API token or username/password)
 
 ### Installation
 
+#### **Option A: npx — no installation required (recommended)**
+
+```bash
+npx zbx-mcp-server --help
+```
+
+The server runs directly without cloning the repository or installing globally.
+
+#### **Option B: Global install**
+
+```bash
+npm install -g zbx-mcp-server
+zbx-mcp-server --help
+```
+
+#### **Option C: From source**
+
 ```bash
 git clone <repository-url>
-cd zabbix-mcp-server
+cd zbx-mcp-server
 npm install
+node src/index.js
 ```
 
 ### Configuration
@@ -113,16 +130,25 @@ npm install
 #### **Option 1: API Token Authentication (Recommended)**
 
 1. **Generate API token** in Zabbix UI: `Administration → General → Tokens → Create token`
-2. **Create `.env` file**:
+2. Pass it via environment variable or CLI flag:
 
-```env
-ZABBIX_API_URL=https://your-zabbix-server/api_jsonrpc.php
-ZABBIX_API_TOKEN=your_api_token_here
+```bash
+# via env var (preferred for MCP clients)
+ZABBIX_API_URL=https://your-zabbix-server/api_jsonrpc.php \
+ZABBIX_API_TOKEN=your_api_token_here \
+npx zbx-mcp-server
+
+# via CLI flags
+npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token your_api_token_here
 ```
 
 #### **Option 2: Username/Password Authentication**
 
-**Create `.env` file**:
+```bash
+npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --user Admin --pass your_password
+```
+
+Or using a `.env` file (when running from source):
 
 ```env
 ZABBIX_API_URL=https://your-zabbix-server/api_jsonrpc.php
@@ -133,44 +159,38 @@ ZABBIX_PASSWORD=your_password
 ### Running the Server
 
 ```bash
-# Start the MCP server (stdio mode)
-npm start
+# stdio mode (default) — used by MCP clients
+npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token mytoken
 
-# Or run directly
-node src/index.js
-
-# HTTP mode (for development)
-MCP_TRANSPORT_MODE=http npm start
+# HTTP mode — useful for development / debugging
+npx zbx-mcp-server --url https://your-zabbix-server/api_jsonrpc.php --token mytoken --http --port 3000
 ```
 
-**Log output:**
+**Log output (on stderr):**
 ```
 [INFO] [Zabbix API Client] Using API token authentication (Zabbix 5.4+)
-[INFO] [Zabbix API Client] Connected to Zabbix API version: 6.0.0
 [INFO] MCP Server started successfully
 ```
 
 ## 🔌 MCP Configuration
 
-To use this server with Claude Desktop, Cursor IDE, or other MCP-compatible clients, you need to add it to your MCP configuration file.
+To use this server with Claude Desktop, Cursor IDE, or other MCP-compatible clients, add it to your MCP configuration file.
 
 ### For Claude Desktop (Windows/Mac/Linux)
 
-Add the following configuration to your `claude_desktop_config.json` file:
+Add the following to your `claude_desktop_config.json`:
 
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 - **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-#### **API Token Authentication (Recommended)**
+#### **npx — no install needed (recommended)**
 ```json
 {
   "mcpServers": {
-    "zabbix-mcp": {
-      "command": "node",
-      "args": [
-        "/path/to/your/zabbix-mcp-server/src/index.js"
-      ],
+    "zabbix": {
+      "command": "npx",
+      "args": ["-y", "zbx-mcp-server"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_API_TOKEN": "your_api_token_here"
@@ -184,11 +204,9 @@ Add the following configuration to your `claude_desktop_config.json` file:
 ```json
 {
   "mcpServers": {
-    "zabbix-mcp": {
-      "command": "node",
-      "args": [
-        "/path/to/your/zabbix-mcp-server/src/index.js"
-      ],
+    "zabbix": {
+      "command": "npx",
+      "args": ["-y", "zbx-mcp-server"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_USERNAME": "Admin",
@@ -201,21 +219,19 @@ Add the following configuration to your `claude_desktop_config.json` file:
 
 ### For Cursor IDE
 
-Add the following configuration to your `mcp.json` file in your Cursor settings directory:
+Add the following to your `mcp.json` in your Cursor settings directory:
 
 - **Windows**: `%APPDATA%\Cursor\User\mcp.json`
 - **Mac**: `~/Library/Application Support/Cursor/User/mcp.json`
 - **Linux**: `~/.config/Cursor/User/mcp.json`
 
-#### **API Token Authentication (Recommended)**
+#### **npx — no install needed (recommended)**
 ```json
 {
   "mcpServers": {
-    "zabbix-mcp": {
-      "command": "node",
-      "args": [
-        "/path/to/your/zabbix-mcp-server/src/index.js"
-      ],
+    "zabbix": {
+      "command": "npx",
+      "args": ["-y", "zbx-mcp-server"],
       "env": {
         "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
         "ZABBIX_API_TOKEN": "your_api_token_here"
@@ -225,29 +241,11 @@ Add the following configuration to your `mcp.json` file in your Cursor settings 
 }
 ```
 
-#### **Username/Password Authentication**
-```json
-{
-  "mcpServers": {
-    "zabbix-mcp": {
-      "command": "node",
-      "args": [
-        "/path/to/your/zabbix-mcp-server/src/index.js"
-      ],
-      "env": {
-        "ZABBIX_API_URL": "https://your-zabbix-server/api_jsonrpc.php",
-        "ZABBIX_USERNAME": "Admin",
-        "ZABBIX_PASSWORD": "your_password"
-      }
-    }
-  }
-}
-```
-
 ### Configuration Notes
 
-- **Replace the path**: Update `/path/to/your/zabbix-mcp-server/src/index.js` with the actual path to your installation
-- **Replace credentials**: Update with your actual Zabbix server URL and credentials
+- **npx caches** the package after first run — subsequent starts are near-instant.
+- Replace `ZABBIX_API_URL` and credentials with your actual Zabbix server values.
+- Use `ZABBIX_API_TOKEN` for Zabbix 5.4+ (preferred). Older versions use `ZABBIX_USERNAME` + `ZABBIX_PASSWORD`.
 - **Server name**: You can change `zabbix-mcp` to any name you prefer
 - **Additional variables**: Add any other environment variables as needed (e.g., `LOG_LEVEL=debug`)
 

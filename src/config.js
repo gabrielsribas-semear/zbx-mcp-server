@@ -32,14 +32,7 @@ dotenv.config();
 function determineAuthMethod() {
     const hasApiToken = !!process.env.ZABBIX_API_TOKEN;
     const hasPassword = !!process.env.ZABBIX_PASSWORD;
-    
-    console.log('[CONFIG DEBUG] Environment variables check:');
-    console.log('[CONFIG DEBUG] ZABBIX_API_TOKEN:', process.env.ZABBIX_API_TOKEN ? 'SET' : 'UNDEFINED');
-    console.log('[CONFIG DEBUG] ZABBIX_PASSWORD:', process.env.ZABBIX_PASSWORD ? 'SET' : 'UNDEFINED');
-    console.log('[CONFIG DEBUG] ZABBIX_USERNAME:', process.env.ZABBIX_USERNAME ? 'SET' : 'UNDEFINED');
-    console.log('[CONFIG DEBUG] ZABBIX_API_URL:', process.env.ZABBIX_API_URL || 'UNDEFINED');
-    console.log('[CONFIG DEBUG] hasApiToken:', hasApiToken, 'hasPassword:', hasPassword);
-    
+
     if (hasApiToken && hasPassword) {
         logger.warn('Both ZABBIX_API_TOKEN and ZABBIX_PASSWORD are set. Using API token (more secure).');
         return 'token';
@@ -56,7 +49,7 @@ const authMethod = determineAuthMethod();
 
 const config = {
     api: {
-        url: process.env.ZABBIX_API_URL || 'https://monitoring.sipef.com/api_jsonrpc.php',
+        url: process.env.ZABBIX_API_URL || '',
         
         // Authentication configuration
         authMethod: authMethod,
@@ -117,8 +110,10 @@ if (!config.api.url) {
     const error = new Error('ZABBIX_API_URL environment variable is required');
     if (process.env.NODE_ENV !== 'test') {
         logger.error('Configuration Error:', error.message);
+        throw error;
+    } else {
+        logger.warn('ZABBIX_API_URL not set (test mode — skipping)');
     }
-    throw error;
 }
 
 // Additional validation warnings

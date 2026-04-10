@@ -118,8 +118,6 @@ Thumbs.db
 .dockerignore
 
 # Original files to ignore (as requested)
-/index.js
-upguardApiClient.js
 
 # Test artifacts
 test-results/
@@ -128,6 +126,7 @@ coverage/
 # Build artifacts
 dist/
 build/
+*.tgz
 
 # Generated documentation
-docs/generated/ 
+docs/generated/

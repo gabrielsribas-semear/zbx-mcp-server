@@ -15,7 +15,7 @@ describe('Zabbix MCP Configuration', () => {
 
   describe('Default Configuration', () => {
     test('should have correct default API configuration', () => {
-      expect(config.api.url).toBe('https://monitoring.sipef.com/api_jsonrpc.php');
+      expect(config.api.url).toBe('');
       expect(config.api.timeout).toBe(120000);
       expect(config.api.authMethod).toBe('none'); // No credentials in test env
       expect(config.api.username).toBe('Admin');
@@ -135,9 +135,14 @@ describe('Zabbix MCP Configuration', () => {
     expect(typeof config.api.timeout).toBe('number');
   });
 
-  test('should have valid Zabbix API URL', () => {
-    expect(config.api.url).toMatch(/^https?:\/\//);
-    expect(config.api.url).toContain('api_jsonrpc.php');
+  test('should have valid Zabbix API URL when set', () => {
+    // URL may be empty in test environment (no ZABBIX_API_URL set)
+    if (config.api.url) {
+      expect(config.api.url).toMatch(/^https?:\/\//);
+      expect(config.api.url).toContain('api_jsonrpc.php');
+    } else {
+      expect(config.api.url).toBe('');
+    }
   });
 
   test('should have reasonable timeout value', () => {
