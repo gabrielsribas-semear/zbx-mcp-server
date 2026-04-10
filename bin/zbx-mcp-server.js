@@ -1,5 +1,27 @@
 #!/usr/bin/env node
 
+// ── CRITICAL: stdio safety — must run before ANY require() ───────────────────
+// MCP stdio transport uses stdout exclusively for JSON-RPC messages.
+// Any console.log() from our code or third-party libraries (e.g. zabbix-utils
+// internal debug output) would corrupt the stream and cause JSON parse errors
+// in the MCP client. Redirect ALL console methods to stderr here, before any
+// module is loaded, so every library is covered.
+const _stderrLog = (...args) =>
+    process.stderr.write(args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ') + '\n');
+console.log   = _stderrLog;
+console.info  = _stderrLog;
+console.warn  = _stderrLog;
+console.debug = _stderrLog;
+// console.error already writes to stderr — leave it untouched.
+
+// ── CRITICAL: early TLS bypass ────────────────────────────────────────────────
+// Must be set before any HTTPS connection is attempted (including module-load
+// side-effects). The env var is also honoured from the calling process, so MCP
+// client "env" blocks work without needing the --insecure flag.
+if (process.env.ZABBIX_IGNORE_SELFSIGNED_CERT === 'true') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 /**
  * zbx-mcp-server — CLI entry point for npx distribution
  *
@@ -19,6 +41,7 @@
  *   --http            Use HTTP transport instead of stdio
  *   --port <port>     HTTP port        (MCP_HTTP_PORT, default: 3000)
  *   --host <host>     HTTP host        (MCP_HTTP_HOST, default: localhost)
+ *   --insecure        Disable TLS certificate validation
  *   --help            Show this help message
  *   --version         Show package version
  */
@@ -132,6 +155,7 @@ for (let i = 0; i < args.length; i++) {
 
     case '--insecure':
       process.env.ZABBIX_IGNORE_SELFSIGNED_CERT = 'true';
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // apply immediately
       break;
 
     case '--port':
